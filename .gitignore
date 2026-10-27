@@ -1,0 +1,6 @@
+tmp/
+output/
+~$*.docx
+.env
+.env.*
+!.env.example
