@@ -1,0 +1,41 @@
+@startuml
+title Beatstore — регистрация пользователя
+skinparam defaultFontName Arial
+skinparam defaultFontSize 15
+skinparam shadowing false
+skinparam maxMessageSize 240
+hide footbox
+autonumber
+actor "Посетитель" as User
+participant "Веб-интерфейс" as UI
+participant "Сервер приложения" as API
+database PostgreSQL as DB
+User -> UI : Ввести имя, email и пароль
+UI -> API : Передать данные регистрации
+API -> API : Проверить данные и нормализовать email
+alt Некорректные данные
+  API --> UI : Ошибки полей
+  UI --> User : Исправить введённые данные
+else Данные допустимы
+  API -> API : Получить стойкий хеш пароля
+  API -> DB : Создать покупателя\nс уникальным email
+  alt Email уже зарегистрирован
+    DB --> API : Нарушение уникальности
+    API --> UI : Email уже используется
+    UI --> User : Сообщение об ошибке
+  else Пользователь создан
+    DB --> API : Идентификатор пользователя
+    API --> UI : Успешная регистрация
+    UI --> User : Предложить вход
+  end
+end
+note over API,DB
+  Пароль в открытом виде не сохраняется.
+  Роль покупателя назначает сервер.
+  Уникальность email защищена также в БД.
+end note
+note over UI,API
+  Подтверждение email и отправка письма
+  в обязательный объём не входят.
+end note
+@enduml

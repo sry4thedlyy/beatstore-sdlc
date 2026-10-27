@@ -1,0 +1,43 @@
+@startuml
+title Beatstore — варианты использования
+left to right direction
+skinparam defaultFontName Arial
+skinparam defaultFontSize 15
+skinparam shadowing false
+skinparam packageStyle rectangle
+skinparam usecaseBackgroundColor #F3F6FA
+skinparam ArrowColor #334155
+actor "Посетитель" as Guest
+actor "Покупатель" as Buyer
+actor "Администратор" as Admin
+actor "ЮKassa\nтестовый режим" as Provider
+rectangle Beatstore {
+  usecase "Каталог, поиск\nи карточка товара\nFR-01" as Catalog
+  usecase "Прослушать демо\nFR-02" as Demo
+  usecase "Зарегистрироваться\nFR-03" as Register
+  usecase "Войти в систему\nFR-03" as Login
+  usecase "Профиль, смена\nпароля и выход\nFR-04" as Profile
+  usecase "Выбрать вариант\nи оформить заказ\nFR-05, FR-07, FR-08" as Checkout
+  usecase "Оплатить заказ\nFR-10" as Pay
+  usecase "Просмотреть\nсвои заказы\nFR-06" as History
+  usecase "Скачать свой комплект\nи готовую лицензию\nFR-06, NFR-03" as Download
+  usecase "Управлять каталогом\nи файлами товаров\nFR-09" as Manage
+  usecase "Обработать результат\nоплаты\nFR-10, FR-11" as Confirm
+  usecase "Подготовить PDF\nлицензии\nFR-12" as License
+}
+Guest -- Catalog
+Guest -- Demo
+Guest -- Register
+Guest -- Login
+Buyer -- Catalog
+Buyer -- Demo
+Buyer -- Profile
+Buyer -- Checkout
+Buyer -- Pay
+Buyer -- History
+Buyer -- Download
+Admin -- Manage
+Pay -- Provider
+Confirm -- Provider
+License ..> Confirm : <<extend>>\n[успешная оплата, PDF не готов]
+@enduml

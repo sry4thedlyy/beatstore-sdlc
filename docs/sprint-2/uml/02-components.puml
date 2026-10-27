@@ -1,0 +1,37 @@
+@startuml
+title Beatstore — диаграмма компонентов
+top to bottom direction
+skinparam defaultFontName Arial
+skinparam defaultFontSize 16
+skinparam componentStyle uml2
+skinparam shadowing false
+skinparam componentBackgroundColor #F3F6FA
+package "Веб-интерфейс" {
+  component "Каталог и\nличный кабинет" as Web
+  component "Административная\nпанель" as Admin
+}
+interface "REST API" as REST
+component "Сервер приложения\n\nУчётные записи и проверка прав\nКаталог, варианты и заказы\nОплата и сверка платежей\nPDF-лицензии и скачивание" as Backend
+database "PostgreSQL\nосновные данные\nи история заказов" as DB
+folder "Файловое хранилище" {
+  artifact "Публичные\nобложки и демо" as Public
+  artifact "Защищённые версии\nфайлов и PDF" as Private
+}
+artifact "Пять версионируемых\nшаблонов лицензий" as Templates
+component "ЮKassa\nтестовый режим" as Provider <<внешняя система>>
+Web ..> REST : запросы
+Admin ..> REST : запросы
+Backend -up- REST : предоставляет
+Backend -down-> DB : чтение и запись
+Backend --> Public : публикация и чтение
+Backend --> Private : проверенная выдача\nи сохранение
+Backend --> Templates : чтение шаблона
+Backend -right-> Provider : создание и проверка\nплатежей
+Provider ..> REST : уведомления
+note bottom of DB
+  Один сервер с логическими модулями.
+  Веб-клиент не обращается к БД
+  и защищённому каталогу напрямую.
+  Email-сервис не требуется.
+end note
+@enduml
