@@ -85,6 +85,10 @@ test('layout fits viewport, links open real cards, no browser errors', async ({ 
   await page.goto('/');
   await expect(page.locator('.product-card')).toHaveCount(5);
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
+  // Scroll as a visitor would so the full-page snapshot includes lazy-loaded covers.
+  await page.locator('.product-card').last().scrollIntoViewIfNeeded();
+  await expect.poll(() => page.locator('img.cover').evaluateAll(images => images.every(image => (image as HTMLImageElement).complete && (image as HTMLImageElement).naturalWidth > 0))).toBe(true);
+  await page.evaluate(() => window.scrollTo(0, 0));
   await page.screenshot({ path: `output/verification/catalog-${testInfo.project.name}.png`, fullPage: true });
   await page.getByRole('link', { name: 'Night Drive', exact: true }).click();
   await expect(page.locator('.variant')).toHaveCount(4);

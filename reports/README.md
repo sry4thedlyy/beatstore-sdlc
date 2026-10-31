@@ -14,3 +14,11 @@
 - [Задачи разработки, зависимости и порядок ближайшей реализации](sprint-02/development-tasks.md).
 - [Соответствие требований диаграммам и задачам](sprint-02/requirements-traceability.md).
 - [Общий PDF диаграмм](../diagrams/beatstore-uml.pdf) и [диаграммы с исходниками](../diagrams/README.md).
+
+## Недели 3–5 Базовая реализация
+
+- [Отчёт — реализованные задачи и границы этапа](sprint-03-05/README.md).
+- [Журнал последовательной разработки и проверок](sprint-03-05/implementation-log.md).
+- [Запуск и сценарий демонстрации](sprint-03-05/demo.md).
+- [Результаты проверок](sprint-03-05/verification.md).
+- [Контракт API](sprint-03-05/api.md) и [физическая схема БД](../database/README.md).
