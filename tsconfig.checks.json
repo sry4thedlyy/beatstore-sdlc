@@ -1,0 +1,5 @@
+{
+  "extends": "./tsconfig.server.json",
+  "compilerOptions": { "rootDir": ".", "noEmit": true },
+  "include": ["src/server", "src/shared", "scripts", "tests", "vite.config.ts", "playwright.config.ts"]
+}

@@ -15,3 +15,8 @@ async function shutdown() {
 }
 process.once('SIGINT', () => void shutdown());
 process.once('SIGTERM', () => void shutdown());
+server.once('error', async () => {
+  console.error('Не удалось запустить HTTP-сервер. Проверьте HOST и PORT.');
+  await db.close();
+  process.exitCode = 1;
+});

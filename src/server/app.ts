@@ -56,6 +56,10 @@ export function createApp(pool: pg.Pool, storageRoot = path.join(config.dataDir,
     res.type(file.media_type).sendFile(relative, { root, dotfiles: 'deny', maxAge: 0 });
   });
   app.use('/api', (_req, res) => { res.status(404).json({ error: 'Маршрут не найден' }); });
+  const clientRoot = path.resolve('dist/client');
+  app.use('/assets', express.static(path.join(clientRoot, 'assets'), { index: false, dotfiles: 'deny', immutable: true, maxAge: '1y' }));
+  app.get('/favicon.svg', (_req, res) => { res.sendFile(path.join(clientRoot, 'favicon.svg')); });
+  app.get(['/', '/products/:slug'], (_req, res) => { res.sendFile(path.join(clientRoot, 'index.html')); });
   const errors: express.ErrorRequestHandler = (_error, _req, res, _next) => {
     if (res.headersSent) { res.destroy(); return; }
     res.status(503).json({ error: 'Сервис временно недоступен. Попробуйте ещё раз.' });

@@ -1,5 +1,5 @@
-export type ProductType = 'beat' | 'drumkit';
-export type VariantKind = 'mp3' | 'wav' | 'trackout' | 'exclusive' | 'drumkit';
+import type { VariantKind } from '../../shared/catalog.js';
+export type { ProductType, VariantKind } from '../../shared/catalog.js';
 export type FilePurpose = 'cover' | 'demo' | 'primary';
 
 export const variantLabels: Record<VariantKind, string> = {
