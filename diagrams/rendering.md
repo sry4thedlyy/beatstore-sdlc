@@ -5,7 +5,8 @@
 Пример команды из корня проекта при установленной Java и скачанном JAR:
 
 ```powershell
-java -Djava.awt.headless=true -jar path\to\plantuml.jar -tsvg -Playout=smetana -charset UTF-8 -failfast2 "docs/sprint-2/uml/*.puml"
+$diagramOutput = Join-Path (Get-Location) "diagrams/svg"
+java -Djava.awt.headless=true -jar path\to\plantuml.jar --format svg --output-dir $diagramOutput -Playout=smetana -charset UTF-8 -failfast2 "diagrams/sources/*.puml"
 ```
 
 После изменения исходника следует проверить соответствующий SVG и обновить общий PDF. При экспорте в SVG добавлена белая подложка, чтобы линии и подписи читались также в тёмных просмотрщиках. Исполняемые файлы рендерера в комплект проекта не включены. В исходниках `.puml` сохраняются редактируемые участники, сообщения, условия и связи.
