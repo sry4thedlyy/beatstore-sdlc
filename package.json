@@ -14,12 +14,15 @@
     "start": "node dist/server/main.js",
     "verify:foundation": "tsx scripts/verify-foundation.ts",
     "db:migrate": "tsx scripts/migrate.ts",
-    "test": "tsx --test --test-concurrency=1 tests/*.test.ts"
+    "test": "tsx --test --test-concurrency=1 tests/*.test.ts",
+    "db:seed": "tsx scripts/seed.ts"
   },
   "dependencies": {
+    "@breezystack/lamejs": "1.2.7",
     "dotenv": "18.0.9",
     "embedded-postgres": "17.10.0-beta.17",
     "express": "5.3.0",
+    "fflate": "0.8.3",
     "helmet": "8.3.0",
     "pg": "8.23.1",
     "react": "19.3.1",
