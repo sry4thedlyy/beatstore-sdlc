@@ -1,0 +1,12 @@
+{
+  "browser": "156.0.8078.79",
+  "viewport": "360x900",
+  "cpuThrottle": 4,
+  "frames": 179,
+  "frameMedianMs": 16.600000000000364,
+  "frameP95Ms": 16.800000000000182,
+  "taskDurationMs": 1585.084,
+  "scriptDurationMs": 118.499,
+  "layoutCount": 12,
+  "jsHeapMb": 3.276050567626953
+}

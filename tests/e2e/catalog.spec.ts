@@ -85,14 +85,63 @@ test('layout fits viewport, links open real cards, no browser errors', async ({ 
   await page.goto('/');
   await expect(page.locator('.product-card')).toHaveCount(5);
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
+  const headlineFits = await page.locator('#hero-title').evaluate(node => {
+    const bounds = node.getBoundingClientRect();
+    return bounds.left >= 0 && bounds.right <= window.innerWidth - 18;
+  });
+  expect(headlineFits).toBe(true);
   // Scroll as a visitor would so the full-page snapshot includes lazy-loaded covers.
-  await page.locator('.product-card').last().scrollIntoViewIfNeeded();
+  for (const card of await page.locator('.product-card').all()) await card.scrollIntoViewIfNeeded();
   await expect.poll(() => page.locator('img.cover').evaluateAll(images => images.every(image => (image as HTMLImageElement).complete && (image as HTMLImageElement).naturalWidth > 0))).toBe(true);
   await page.evaluate(() => window.scrollTo(0, 0));
-  await page.screenshot({ path: `output/verification/catalog-${testInfo.project.name}.png`, fullPage: true });
+  await page.screenshot({ path: `output/verification/catalog-${testInfo.project.name}.png`, fullPage: true, animations: 'disabled' });
   await page.getByRole('link', { name: 'Night Drive', exact: true }).click();
   await expect(page.locator('.variant')).toHaveCount(4);
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
-  await page.screenshot({ path: `output/verification/card-${testInfo.project.name}.png`, fullPage: true });
+  await page.screenshot({ path: `output/verification/card-${testInfo.project.name}.png`, fullPage: true, animations: 'disabled' });
   expect(errors).toEqual([]);
+});
+
+test('effects can be disabled persistently; audio and catalog stay usable', async ({ page }) => {
+  await page.goto('/');
+  const effects = page.getByRole('button', { name: 'Анимации интерфейса' });
+  await expect(effects).toHaveAttribute('aria-pressed', 'true');
+  await effects.click();
+  await expect(effects).toHaveAttribute('aria-pressed', 'false');
+  await page.reload();
+  await expect(effects).toHaveAttribute('aria-pressed', 'false');
+  expect(await page.locator('.record').evaluate(node => getComputedStyle(node).animationName)).toBe('none');
+  await page.getByRole('button', { name: 'Слушать главный трек Night Drive' }).click();
+  await expect.poll(() => page.locator('audio').evaluate(node => (node as HTMLAudioElement).currentTime)).toBeGreaterThan(.15);
+  await page.getByRole('button', { name: 'Закрыть плеер' }).click();
+  await expect(page.getByRole('complementary', { name: 'Аудиоплеер' })).toHaveCount(0);
+  expect(await page.locator('audio').evaluate(node => (node as HTMLAudioElement).paused)).toBe(true);
+  await page.getByRole('searchbox').fill('glacier');
+  await expect(page.locator('.product-card')).toHaveCount(1);
+});
+
+test('reduced motion and offscreen hero pause decorative animation', async ({ page }) => {
+  await page.goto('/');
+  await expect(page.locator('.hero-preview')).toBeVisible();
+  expect(await page.locator('.record').evaluate(node => getComputedStyle(node).animationPlayState)).toBe('paused');
+  await page.getByRole('button', { name: 'Слушать главный трек Night Drive' }).click();
+  expect(await page.locator('.record').evaluate(node => getComputedStyle(node).animationPlayState)).toBe('running');
+  await page.locator('.site-footer').scrollIntoViewIfNeeded();
+  await expect.poll(() => page.locator('.record').evaluate(node => getComputedStyle(node).animationPlayState)).toBe('paused');
+  await page.emulateMedia({ reducedMotion: 'reduce' });
+  await expect(page.getByRole('button', { name: 'Анимации интерфейса' })).toHaveAttribute('aria-pressed', 'false');
+  expect(await page.locator('.record').evaluate(node => getComputedStyle(node).animationName)).toBe('none');
+  for (const card of await page.locator('.product-card').all()) {
+    expect(await card.evaluate(node => getComputedStyle(node).opacity)).toBe('1');
+  }
+});
+
+test('bundle details expand with accurate format descriptions', async ({ page }) => {
+  await page.goto('/products/night-drive');
+  const wav = page.locator('.variant').filter({ hasText: 'WAV лизинг' });
+  await wav.locator('summary').click();
+  await expect(wav.getByText('Один WAV-файл бита. Другие форматы в этот комплект не входят.')).toBeVisible();
+  const exclusive = page.locator('.variant').filter({ hasText: 'Эксклюзивные права' });
+  await exclusive.locator('summary').click();
+  await expect(exclusive.locator('.variant-description')).toContainText('project.json');
 });

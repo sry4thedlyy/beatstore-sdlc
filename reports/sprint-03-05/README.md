@@ -37,5 +37,6 @@
 - [Журнал последовательной реализации и работы с ИИ](implementation-log.md).
 - [Запуск, демонстрация и объяснение одной задачи](demo.md).
 - [Результаты проверок](verification.md).
+- [Доработка дизайна, анимации и замеры плавности](interface-design.md).
 - [API](api.md), [схема и миграции БД](../../database/README.md).
 - [ТЗ](../../specification/beatstore-specification.pdf) и [UML](../../diagrams/README.md).
