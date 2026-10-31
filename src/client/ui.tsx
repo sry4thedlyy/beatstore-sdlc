@@ -25,6 +25,10 @@ export function Equalizer({ active = false }: { active?: boolean }) {
   return <span className={`equalizer ${active ? 'is-playing' : ''}`} aria-hidden="true"><i /><i /><i /><i /><i /></span>;
 }
 
+export function WaveMark() {
+  return <svg className="wave-mark" viewBox="0 0 68 40" fill="none" stroke="currentColor" strokeWidth="4" strokeLinecap="round" aria-hidden="true"><path d="M4 17v6M12 12v16M20 6v28M28 13v14M36 3v34M44 9v22M52 14v12M60 11v18" /></svg>;
+}
+
 export function useResource<T>(url: string) {
   const [data, setData] = useState<T>();
   const [error, setError] = useState('');

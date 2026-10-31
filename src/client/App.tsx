@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import type { CatalogResponse, Product, ProductType } from '../shared/catalog';
 import { AudioProvider, PlayButton, usePlayback } from './audio';
 import { useMotionPreference, useRecordMotion, useReveal } from './motion';
-import { Equalizer, Icon, money, ResourceState, useResource } from './ui';
+import { Equalizer, Icon, money, ResourceState, useResource, WaveMark } from './ui';
 
 export function App() { return <AudioProvider><Layout /></AudioProvider>; }
 
@@ -28,13 +28,13 @@ function Hero() {
   const active = Boolean(featured && current?.id === featured.id && playing);
   return <>
     <section className="hero" aria-labelledby="hero-title">
-      <div className="hero-copy"><p className="eyebrow hero-eyebrow"><span className="status-dot" /> INDEPENDENT SOUND. UNLIMITED IDEAS.</p><h1 id="hero-title">ЗВУК,<br />КОТОРЫЙ<br /><span>ЦЕПЛЯЕТ.</span><span className="hero-asterisk" aria-hidden="true">✳</span></h1><p className="hero-caption">Биты с характером и драмкиты для новых идей.<br />Твой следующий трек начинается здесь.</p><div className="hero-actions"><a href="#catalog" className="button hero-cta">Найти свой звук <span><Icon name="arrow" size={22} /></span></a><span className="hero-small">НАЖМИ PLAY.<br />ПОЧУВСТВУЙ ВАЙБ.</span></div></div>
+      <div className="hero-copy"><p className="eyebrow hero-eyebrow"><span className="status-dot" /> INDEPENDENT SOUND. UNLIMITED IDEAS.</p><h1 id="hero-title">ЗВУК,<br />КОТОРЫЙ<br /><span>ЦЕПЛЯЕТ.</span><span className="hero-wave" aria-hidden="true"><WaveMark /></span></h1><p className="hero-caption">Биты с характером и драмкиты для новых идей.<br />Твой следующий трек начинается здесь.</p><div className="hero-actions"><a href="#catalog" className="button hero-cta">Найти свой звук <span><Icon name="arrow" size={22} /></span></a><span className="hero-small">НАЖМИ PLAY.<br />ПОЧУВСТВУЙ ВАЙБ.</span></div></div>
       <div className={`record-art ${active ? 'is-playing' : ''}`} ref={record}>
         <div className="art-plane" aria-hidden="true"><div className="art-grid" /><span className="art-caption">BEATSTORE SOUND LAB<br /><b>ORIGINALS — VOL. 01</b></span><span className="art-coordinate">33° / BS</span><div className="record-orbit orbit-one" /><div className="record-orbit orbit-two" /><div className="record-stage"><div className="record"><div className="record-rim" /><div className="record-label"><span className="record-type">INDEPENDENT SOUND</span><strong>bs.</strong><span className="record-hole" /><span className="record-side">SIDE A / ORIGINAL</span></div></div></div><div className="art-sticker">100%<span>СВОЙ ЗВУК</span></div><span className="art-bottom">GOOD SOUND.<br />GREAT STORIES.</span><span className="art-cross">↗</span></div>
         {featured && <div className="hero-preview" id="listen"><PlayButton product={featured} hero /><div><span className="preview-kicker">{active ? 'СЕЙЧАС ИГРАЕТ' : 'НА ПРОСЛУШКУ'}</span><strong>{featured.title}<span> / {featured.genre}</span></strong></div><Equalizer active={active} /></div>}
       </div>
     </section>
-    <div className="sound-strip" aria-hidden="true"><span>BEATS WITH CHARACTER</span><i>✳</i><span>СОЗДАВАЙ СВОЁ</span><i>✳</i><span>PRESS PLAY. FEEL SOMETHING.</span><i>✳</i><span>NO ORDINARY SOUND</span></div>
+    <div className="sound-strip" aria-hidden="true"><span>BEATS WITH CHARACTER</span><i><WaveMark /></i><span>СОЗДАВАЙ СВОЁ</span><i><WaveMark /></i><span>PRESS PLAY. FEEL SOMETHING.</span><i><WaveMark /></i><span>NO ORDINARY SOUND</span></div>
   </>;
 }
 
@@ -54,7 +54,7 @@ function Catalog() {
       <ResourceState {...resource} />
       {!resource.loading && !resource.error && resource.data && (resource.data.items.length ? <div className="product-grid">{resource.data.items.map((product, index) => <ProductCard key={product.id} product={product} index={index} />)}</div> : <div className="state-box"><span className="state-icon"><Icon name="search" size={28} /></span><h3>Пока ничего не нашлось</h3><p>Попробуйте другое название или посмотрите весь каталог.</p><button className="button" onClick={() => { setQuery(''); setType(''); }}>Сбросить поиск <Icon name="arrow" size={17} /></button></div>)}
     </section>
-    <section className="catalog-note"><div><p className="eyebrow">СЛУШАЙ. ВДОХНОВЛЯЙСЯ. СОЗДАВАЙ.</p><h2>ТВОЙ ВАЙБ.<br />ТВОИ ПРАВИЛА.</h2></div><div className="note-right"><span className="note-asterisk" aria-hidden="true">✳</span><p>Сначала почувствуй звук.<br />У каждого релиза есть демо,<br />а у каждого варианта — свой комплект.</p></div></section>
+    <section className="catalog-note"><div><p className="eyebrow">СЛУШАЙ. ВДОХНОВЛЯЙСЯ. СОЗДАВАЙ.</p><h2>ТВОЙ ВАЙБ.<br />ТВОИ ПРАВИЛА.</h2></div><div className="note-right"><span className="note-wave" aria-hidden="true"><WaveMark /></span><p>Сначала почувствуй звук.<br />У каждого релиза есть демо,<br />а у каждого варианта — свой комплект.</p></div></section>
   </main>;
 }
 
